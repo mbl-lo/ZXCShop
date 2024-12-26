@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продать аккаунт - ZXCShop</title>
+    <link rel="stylesheet" href="sellacc.css"> 
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault(); 
+            alert('Вы успешно выставили свой аккаунт на продажу'); 
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Главная</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="main-title">Продайте свой аккаунт</h1>
+        <section class="sell-account">
+            <h2>Информация о продаже</h2>
+            <p>Заполните форму ниже, чтобы продать свой аккаунт. Мы гарантируем безопасность и конфиденциальность ваших
+                данных.</p>
+            <form id="sellAccountForm" onsubmit="handleSubmit(event)">
+                <label for="accountName">Название аккаунта:</label>
+                <input type="text" id="accountName" name="accountName" required>
+
+                <label for="accountDetails">Описание аккаунта:</label>
+                <textarea id="accountDetails" name="accountDetails" required></textarea>
+
+                <label for="price">Цена:</label>
+                <input type="number" id="price" name="price" required>
+
+                <button type="submit">Продать аккаунт</button>
+            </form>
+        </section>
+    </main>
+
+</body>
+
+</html>

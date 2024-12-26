@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZXCShop</title>
+    <link rel="stylesheet" href="buyacc.css">
+    <style>
+        /* Добавляем стили для корзины и модального окна */
+        .cart {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            /* Начальная непрозрачность */
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            /* Анимация */
+            transform: translateX(-200%);
+            /* Сдвиг корзины влево */
+        }
+
+        .cart.active {
+            display: flex;
+            opacity: 1;
+            /* Конечная непрозрачность */
+            transform: translateX(0);
+            /* Корзина на месте */
+        }
+
+        .cart-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            position: relative;
+            /* Позволяет кнопкам располагаться относительно этого контейнера */
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px;
+        }
+
+        .close-button {
+            background-color: black;
+            /* Черный цвет кнопки закрыть */
+            color: white;
+            /* Белый текст для кнопки */
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            position: absolute;
+            /* Позиционируем кнопку в правом верхнем углу */
+            top: 10px;
+            right: 10px;
+        }
+
+        .buy-button {
+            background-color: green;
+            /* Зеленый цвет кнопки купить */
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .remove-button {
+            background-color: red;
+            /* Красный цвет кнопки удалить */
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Новые стили для кнопки в правом верхнем углу */
+        .nav-button {
+            margin-left: 10px;
+            
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>ZXCShop</h1>
+            </div>
+
+            <div class="links">
+                <ul>
+                    <li><a class="active" href="index.html">Главная</a></li>
+                    <li>
+                        <a href="#">Услуги</a>
+                        <ul class="submenu">
+                            <li><a href="buyacc.html">Покупка аккаунта</a></li>
+                            <li><a href="sellacc.html">Продажа Аккаунта</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="contact.html">Контакты</a>
+                    </li>
+                    <li><a href="/Personal account/index.html">Личный кабинет</a></li>
+                </ul>
+
+            </div>
+            <div class="login-sec">
+                <button class="nav-button" style="margin-right: 100px;" onclick="openCart()">Корзина</button>
+            </div>
+        </nav>
+        <div class="home-content">
+            <div class="home-container">
+                <h1>На нашем сайте вы сможете найти лучшие аккаунты в Dota 2 которые представлены вам ниже</h1>
+            </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="card">
+                <h2>Аккаунт 5000 MMR</h2>
+                <p>11000 порядочности </p>
+                <p>5000 матчей</p>
+                <p>Подписку Dota Plus можно продлить бесплатно</p>
+                <button class="buy-button" onclick="addToCart('Аккаунт 5000 MMR', 5230)">5230 RUB</button>
+            </div>
+            <div class="card">
+                <h2>Аккаунт 1500 MMR</h2>
+                <p>5000 порядочности</p>
+                <p>11000 матчей</p>
+                <p>Есть некоторые лимитированные скины</p>
+                <button class="buy-button" onclick="addToCart('Аккаунт 1500 MMR', 1500)">1500 RUB</button>
+            </div>
+            <div class="card">
+                <h2>Аккаунт 9700 MMR</h2>
+                <p>10000 порядочности</p>
+                <p>2361 матчей</p>
+                <p>Имеется аркана на Drow Ranger</p>
+                <button class="buy-button" onclick="addToCart('Аккаунт 9700 MMR', 10000)">10000 RUB</button>
+            </div>
+        </div>
+        <div class="cart" id="cart">
+            <div class="cart-content">
+                <h2>Корзина</h2>
+                <div id="cartItems"></div>
+                <button class="buy-button" onclick="purchase()">Купить</button>
+                <button class="close-button" onclick="closeCart()">Закрыть</button>
+            </div>
+        </div>
+        <script>
+            let cart = [];
+
+            function addToCart(itemName, itemPrice) {
+                cart.push({ name: itemName, price: itemPrice });
+                updateCart();
+                openCart();
+            }
+
+            function updateCart() {
+                const cartItems = document.getElementById('cartItems');
+                cartItems.innerHTML = '';
+                cart.forEach((item, index) => {
+                    cartItems.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name} - ${item.price} RUB</span>
+                        <button class="remove-button" onclick="removeFromCart(${index})">Удалить</button>
+                    </div>
+                `;
+                });
+            }
+
+            function removeFromCart(index) {
+                cart.splice(index, 1);
+                updateCart();
+            }
+
+            function openCart() {
+                const cartElement = document.getElementById('cart');
+                cartElement.classList.add('active');
+            }
+
+            function closeCart() {
+                const cartElement = document.getElementById('cart');
+                cartElement.classList.remove('active');
+            }
+
+            function purchase() {
+                if (cart.length > 0) {
+                    alert("Спасибо за покупку!");
+                    cart = []; // Очищаем корзину после покупки
+                    updateCart();
+                    closeCart();
+                } else {
+                    alert("Корзина пуста!");
+                }
+            }
+        </script>
+</body>
+
+</html>
